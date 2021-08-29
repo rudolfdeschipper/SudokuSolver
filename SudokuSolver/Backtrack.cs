@@ -9,12 +9,12 @@ namespace SudokuSolver
     class Backtrack
     {
 
-        public Cell[] CellsToSolve { get; set; }
-        public Board board { get; set; }
+        private Cell[] CellsToSolve { get; set; }
+        private Board BoardToSolve { get; set; }
 
         public Backtrack(Board _board)
         {
-            board = _board;
+            BoardToSolve = _board;
             CellsToSolve = _board.cells.Where(c => c.FixedValue == 0)
                 .OrderBy(c => c.PossibleValues.Count(p => p == true))
                 .ToArray();
@@ -51,16 +51,16 @@ namespace SudokuSolver
         {
             for (int i = 0; i < 81; i++)
             {
-                if (!board.cells[i].IsSolved()) return false;
+                if (!BoardToSolve.cells[i].IsSolved()) return false;
             }
             return true;
         }
 
         private bool IsValidConfiguration(Cell currentCell)
         {
-            var isRowValid = board.cells.Count(c => c.Row == currentCell.Row && c.FixedValue == currentCell.FixedValue) == 1;
-            var isColumnValid = board.cells.Count(c => c.Column == currentCell.Column && c.FixedValue == currentCell.FixedValue) == 1;
-            var isAreaValid = board.cells.Count(c => c.Area == currentCell.Area && c.FixedValue == currentCell.FixedValue) == 1;
+            var isRowValid = BoardToSolve.cells.Count(c => c.Row == currentCell.Row && c.FixedValue == currentCell.FixedValue) == 1;
+            var isColumnValid = BoardToSolve.cells.Count(c => c.Column == currentCell.Column && c.FixedValue == currentCell.FixedValue) == 1;
+            var isAreaValid = BoardToSolve.cells.Count(c => c.Area == currentCell.Area && c.FixedValue == currentCell.FixedValue) == 1;
 
             return isRowValid && isColumnValid && isAreaValid;
         }
